@@ -37,6 +37,9 @@ option('bios-verify-status-filename', type : 'string', value : '/tmp/bios.verify
 option('preparation-dbus-service', type : 'string', value : 'phosphor-ipmi-flash-bmc-prepare.target', description : 'The systemd target started when the host starts to send an update')
 option('verify-dbus-service', type : 'string', value : 'phosphor-ipmi-flash-bmc-verify.target', description : 'The systemd target started for verification')
 option('update-dbus-service', type : 'string', value : 'phosphor-ipmi-flash-bmc-update.target', description : 'The systemd target started for updating the BMC')
+
+
+
 option('bios-staged-name', type : 'string', value : 'bios-staged-name', description : 'The file to use for staging the bios firmware update')
 option('preparation-bios-target', type : 'string', value : 'phosphor-ipmi-flash-bios-prepare.target', description : 'The systemd target started when the host starts to send an update')
 option('verify-bios-target', type : 'string', value : 'phosphor-ipmi-flash-bios-verify.target', description : 'The systemd target started for verifying the BIOS image')

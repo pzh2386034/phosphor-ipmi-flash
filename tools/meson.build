@@ -4,7 +4,6 @@ updater_pre = [
   dependency('ipmiblob'),
   dependency('pciaccess', fallback: ['pciaccess', 'dep_pciaccess']),
   dependency('stdplus', fallback: ['stdplus', 'stdplus_dep']),
-  blobs_dep,
   sys_dep]
 
 updater_lib = static_library(
@@ -37,6 +36,6 @@ executable(
   install: true,
   install_dir: get_option('bindir'))
 
-if not get_option('tests').disabled()
-  subdir('test')
-endif
+# if not get_option('tests').disabled()
+#   subdir('test')
+# endif
