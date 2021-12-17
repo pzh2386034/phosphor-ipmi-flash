@@ -1,9 +1,9 @@
 tools_inc = include_directories('.')
 
 updater_pre = [
-  dependency('ipmiblob'),
-  dependency('pciaccess', fallback: ['pciaccess', 'dep_pciaccess']),
-  dependency('stdplus', fallback: ['stdplus', 'stdplus_dep']),
+  dependency('ipmiblob', static:true),
+  dependency('pciaccess', fallback: ['pciaccess', 'dep_pciaccess'], static:true),
+  dependency('stdplus', fallback: ['stdplus', 'stdplus_dep'], static:true),
   sys_dep]
 
 updater_lib = static_library(

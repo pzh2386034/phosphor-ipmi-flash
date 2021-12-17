@@ -1,7 +1,5 @@
 #pragma once
 
-#include <function2/function2.hpp>
-
 #include <cstdint>
 
 namespace ipmi_flash
@@ -19,7 +17,6 @@ enum class ActionStatus : std::uint8_t
 class TriggerableActionInterface
 {
   public:
-    using Callback = fu2::unique_function<void(TriggerableActionInterface&)>;
 
     virtual ~TriggerableActionInterface() = default;
 
@@ -36,14 +33,6 @@ class TriggerableActionInterface
     /** Check the current state of the action. */
     virtual ActionStatus status() = 0;
 
-    /** Sets the callback that is executed on completion of the trigger. */
-    void setCallback(Callback&& cb)
-    {
-        this->cb = std::move(cb);
-    }
-
-  protected:
-    Callback cb;
 };
 
 } // namespace ipmi_flash
