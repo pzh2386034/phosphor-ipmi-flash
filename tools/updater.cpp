@@ -31,6 +31,7 @@
 #include <thread>
 #include <unordered_map>
 #include <vector>
+#include <unistd.h>
 
 namespace host_tool
 {
@@ -42,6 +43,7 @@ void updaterMain(UpdateHandlerInterface* updater, ipmiblob::BlobInterface* blob,
     /* TODO: validate the layoutType isn't a special value such as: 'update',
      * 'verify', or 'hash'
      */
+    bool createSig = false;
     std::string layout = "/flash/" + layoutType;
 
     bool goalSupported = updater->checkAvailable(layout);
@@ -67,6 +69,15 @@ void updaterMain(UpdateHandlerInterface* updater, ipmiblob::BlobInterface* blob,
         }
     }
 
+    if (access(signaturePath.c_str(), R_OK) != 0)
+    {
+        FILE *fp = fopen(signaturePath.c_str() ,"a");
+        fprintf(fp, "Empty sig file.\n");
+        fclose(fp);
+        createSig = true;
+    }
+
+
     /* Yay, our layout type is supported. */
     try
     {
@@ -90,12 +101,19 @@ void updaterMain(UpdateHandlerInterface* updater, ipmiblob::BlobInterface* blob,
             std::fprintf(stderr, "failed\n");
             throw ToolException("Verification failed");
         }
-
+        if (createSig)
+        {
+            unlink(signaturePath.c_str());
+        }
         /* Trigger the update by opening and committing the update file. */
         std::fprintf(stderr, "Opening the update file\n");
         if (updater->verifyFile(ipmi_flash::updateBlobId, ignoreUpdate))
         {
             std::fprintf(stderr, "succeeded\n");
+            if (layoutType != "bmc")
+            {
+                std::fprintf(stderr, "MUST BE POWER OFF TO TRIGER UPDATE!\n");
+            }
         }
         else
         {

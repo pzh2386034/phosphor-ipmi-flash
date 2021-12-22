@@ -87,7 +87,7 @@ bool checkInterface(const std::string& interface)
 
 int main(int argc, char* argv[])
 {
-    std::string command, interface, imagePath, signaturePath, type, host;
+    std::string command, interface, imagePath, signaturePath(""), type, host;
     std::string port = "623";
     char* valueEnd = nullptr;
     long address = 0;
@@ -197,15 +197,24 @@ int main(int argc, char* argv[])
 
     if (command.empty())
     {
-        usage(argv[0]);
-        exit(EXIT_FAILURE);
+        std::fprintf(stderr, "command not specified, use default command: update\n");
+        command = "update";
     }
 
     /* They want to update the firmware. */
     if (command == "update")
     {
-        if (interface.empty() || imagePath.empty() || signaturePath.empty() ||
-            type.empty())
+        if (interface.empty())
+        {
+            fprintf(stderr, "interface is empty, use the default value IPMILPC.\n");
+            interface = IPMILPC;
+        }
+        if (signaturePath != "")
+        {
+            fprintf(stderr, "command update, cannot use signaturePath.\n");
+            exit(EXIT_FAILURE);
+        }
+        if (interface.empty() || imagePath.empty() || type.empty())
         {
             usage(argv[0]);
             exit(EXIT_FAILURE);
@@ -243,8 +252,9 @@ int main(int argc, char* argv[])
         {
             if (hostAddress == 0 || hostLength == 0)
             {
-                std::fprintf(stderr, "Address or Length were 0\n");
-                exit(EXIT_FAILURE);
+                hostAddress = 0x94d00000; /* the same as set in config.h  by panzehua, 2021-12-21 */
+                hostLength = 0x10000; /* use 64kb length  by panzehua, 2021-12-21 */
+                std::fprintf(stderr, "Address or Length were 0, use default value.\n");
             }
             handler = std::make_unique<host_tool::LpcDataHandler>(
                 &blob, &devmem, hostAddress, hostLength, &progress);
@@ -274,7 +284,7 @@ int main(int argc, char* argv[])
         try
         {
             host_tool::UpdateHandler updater(&blob, handler.get());
-            host_tool::updaterMain(&updater, &blob, imagePath, signaturePath,
+            host_tool::updaterMain(&updater, &blob, imagePath, "bmc.sig",
                                    type, ignoreUpdate);
         }
         catch (const host_tool::ToolException& e)
