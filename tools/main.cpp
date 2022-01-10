@@ -197,7 +197,7 @@ int main(int argc, char* argv[])
 
     if (command.empty())
     {
-        std::fprintf(stderr, "command not specified, use default command: update\n");
+        std::fprintf(stderr, "Info:command not specified, use default command: update\n");
         command = "update";
     }
 
@@ -206,12 +206,12 @@ int main(int argc, char* argv[])
     {
         if (interface.empty())
         {
-            fprintf(stderr, "interface is empty, use the default value IPMILPC.\n");
+            fprintf(stderr, "Info:interface is empty, use the default value IPMILPC.\n");
             interface = IPMILPC;
         }
         if (signaturePath != "")
         {
-            fprintf(stderr, "command update, cannot use signaturePath.\n");
+            fprintf(stderr, "Info:command update, cannot use signaturePath.\n");
             exit(EXIT_FAILURE);
         }
         if (interface.empty() || imagePath.empty() || type.empty())

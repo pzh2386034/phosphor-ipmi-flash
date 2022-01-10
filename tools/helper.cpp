@@ -92,21 +92,31 @@ void pollStatus(std::uint16_t session, ipmiblob::BlobInterface* blob)
 {
     pollStat(session, blob,
              [](const ipmiblob::StatResponse& resp) -> std::optional<bool> {
-                 if (resp.metadata.size() != 1)
-                 {
-                     throw ToolException("Invalid stat metadata");
-                 }
                  auto result =
                      static_cast<ipmi_flash::ActionStatus>(resp.metadata[0]);
                  switch (result)
                  {
                      case ipmi_flash::ActionStatus::failed:
+                     {
+                         if (resp.metadata.size() != 1)
+                         {
+                            std::string versionId(resp.metadata.begin()++, resp.metadata.end() );
+                            std::fprintf(stderr, "BMC report error:%s\n", versionId.c_str());
+                         }
                          throw ToolException("BMC reported failure");
+                     }
                      case ipmi_flash::ActionStatus::unknown:
                      case ipmi_flash::ActionStatus::running:
                          return std::nullopt;
                      case ipmi_flash::ActionStatus::success:
-                         return true;
+                        {
+                            if (resp.metadata.size() != 1)
+                            {
+                                std::string versionId(resp.metadata.begin()++, resp.metadata.end() );
+                                std::fprintf(stderr, "Openbmc update versionId:%s\n", versionId.c_str());
+                            }
+                            return true;
+                        }
                      default:
                          throw ToolException("Unrecognized action status");
                  }
