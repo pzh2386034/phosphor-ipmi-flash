@@ -113,7 +113,9 @@ void pollStatus(std::uint16_t session, ipmiblob::BlobInterface* blob)
                             if (resp.metadata.size() != 1)
                             {
                                 std::string versionId(resp.metadata.begin()++, resp.metadata.end() );
-                                std::fprintf(stderr, "Openbmc update versionId:%s\n", versionId.c_str());
+                                std::string url("/redfish/v1/UpdateService/FirmwareInventory/");
+                                url += versionId;
+                                std::fprintf(stderr, "Openbmc check upgrade URL:%s\n", url.c_str());
                             }
                             return true;
                         }

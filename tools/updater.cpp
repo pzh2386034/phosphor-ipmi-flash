@@ -59,7 +59,7 @@ void updaterMain(UpdateHandlerInterface* updater, ipmiblob::BlobInterface* blob,
     for (const auto& activeBlob : blobList)
     {
         // Prefix is /flash/active/
-        if (activeBlob.find("/flash/active/"))
+        if (strncmp(activeBlob.c_str(), "/flash/active", 13) == 0)
         {
             std::fprintf(stderr, "Found an active blob, deleting %s\n",
                          activeBlob.c_str());

@@ -47,6 +47,7 @@
 #define IPMIPCI_SKIP_BRIDGE_DISABLE "ipmipci-skip-bridge-disable"
 #define IPMIBT "ipmibt"
 #define IPMINET "ipminet"
+#define VERSION "v0.3.0"
 
 namespace
 {
@@ -95,6 +96,7 @@ int main(int argc, char* argv[])
     std::uint32_t hostAddress = 0;
     std::uint32_t hostLength = 0;
     bool ignoreUpdate = false;
+    std::fprintf(stderr, "%s\n", VERSION);
 
     while (1)
     {
