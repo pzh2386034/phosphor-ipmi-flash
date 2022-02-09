@@ -110,7 +110,7 @@ void updaterMain(UpdateHandlerInterface* updater, ipmiblob::BlobInterface* blob,
         if (updater->verifyFile(ipmi_flash::updateBlobId, ignoreUpdate))
         {
             std::fprintf(stderr, "succeeded\n");
-            if (layoutType != "bmc")
+            if (layoutType != "bmc" && layoutType != "bmc-factory")
             {
                 std::fprintf(stderr, "MUST BE POWER OFF TO TRIGER UPDATE!\n");
             }

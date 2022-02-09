@@ -38,8 +38,8 @@ static auto pollStat(std::uint16_t session, ipmiblob::BlobInterface* blob,
     using namespace std::chrono_literals;
 
     constexpr auto maxSleep = 1s;
-    constexpr auto printInterval = 30s;
-    constexpr auto timeout = 30min;
+    constexpr auto printInterval = 10s;
+    constexpr auto timeout = 10min;
 
     try
     {
@@ -61,7 +61,11 @@ static auto pollStat(std::uint16_t session, ipmiblob::BlobInterface* blob,
             auto cur = std::chrono::steady_clock::now();
             if (cur - last_print >= printInterval)
             {
-                std::fprintf(stderr, "running\n");
+                if (resp.metadata.size() == 2)
+                {
+                    std::fprintf(stderr, "Progress: %d%%\n", resp.metadata[1]);
+                }
+                else std::fprintf(stderr, "running\n");
                 last_print = cur;
             }
 

@@ -47,7 +47,7 @@
 #define IPMIPCI_SKIP_BRIDGE_DISABLE "ipmipci-skip-bridge-disable"
 #define IPMIBT "ipmibt"
 #define IPMINET "ipminet"
-#define VERSION "v0.3.0"
+#define VERSION "v0.3.1"
 
 namespace
 {
