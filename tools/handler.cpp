@@ -159,7 +159,6 @@ void UpdateHandler::cleanArtifacts()
     /* Errors aren't important for this call. */
     try
     {
-        std::fprintf(stderr, "Executing cleanup blob\n");
         auto session =
             openBlob(blob, ipmi_flash::cleanupBlobId,
                      static_cast<std::uint16_t>(
@@ -168,7 +167,7 @@ void UpdateHandler::cleanArtifacts()
     }
     catch (const std::exception& e)
     {
-        std::fprintf(stderr, "Cleanup failed: %s\n", e.what());
+
     }
 }
 

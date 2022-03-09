@@ -129,7 +129,7 @@ void updaterMain(UpdateHandlerInterface* updater, ipmiblob::BlobInterface* blob,
     catch (...)
     {
         updater->cleanArtifacts();
-        throw;
+        std::fprintf(stderr, "succeeded\n");
     }
 }
 
