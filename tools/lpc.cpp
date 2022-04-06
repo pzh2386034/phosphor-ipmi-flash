@@ -43,12 +43,8 @@ bool LpcDataHandler::sendContents(const std::string& input,
         /* If the writeMeta() is rejected we need to call sessionStat on it. */
         try
         {
-            std::fprintf(stderr, "sending writeMeta\n");
-
             std::memcpy(payload.data(), &host_lpc_buf, sizeof(host_lpc_buf));
             blob->writeMeta(session, 0x00, payload);
-
-            std::fprintf(stderr, "writemeta sent\n");
 
             break;
         }

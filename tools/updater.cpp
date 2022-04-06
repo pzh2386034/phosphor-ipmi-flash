@@ -88,9 +88,16 @@ void updaterMain(UpdateHandlerInterface* updater, ipmiblob::BlobInterface* blob,
         /* Send over the hash contents. */
         std::fprintf(stderr, "Sending over the hash file.\n");
         updater->sendFile(ipmi_flash::hashBlobId, signaturePath);
-
+    }
+    catch (...)
+    {
+        updater->cleanArtifacts();
+        std::fprintf(stderr, "Send image file failed.\n");
+        throw;
+    }
         /* Trigger the verification by opening and committing the verify file.
          */
+    try{
         std::fprintf(stderr, "Opening the verification file\n");
         if (updater->verifyFile(ipmi_flash::verifyBlobId, false))
         {
@@ -98,13 +105,20 @@ void updaterMain(UpdateHandlerInterface* updater, ipmiblob::BlobInterface* blob,
         }
         else
         {
-            std::fprintf(stderr, "failed\n");
+            std::fprintf(stderr, "Verify image failed.\n");
             throw ToolException("Verification failed");
         }
         if (createSig)
         {
             unlink(signaturePath.c_str());
         }
+    }
+    catch (...)
+    {
+        updater->cleanArtifacts();
+        throw;
+    }
+    try{
         /* Trigger the update by opening and committing the update file. */
         std::fprintf(stderr, "Opening the update file\n");
         if (updater->verifyFile(ipmi_flash::updateBlobId, ignoreUpdate))

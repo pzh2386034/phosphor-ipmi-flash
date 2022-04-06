@@ -104,7 +104,7 @@ void pollStatus(std::uint16_t session, ipmiblob::BlobInterface* blob)
                      {
                          if (resp.metadata.size() != 1)
                          {
-                            std::string versionId(resp.metadata.begin()++, resp.metadata.end() );
+                            std::string versionId(++resp.metadata.begin(), resp.metadata.end() );
                             std::fprintf(stderr, "BMC report error:%s\n", versionId.c_str());
                          }
                          throw ToolException("BMC reported failure");

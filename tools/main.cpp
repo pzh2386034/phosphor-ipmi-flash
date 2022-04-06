@@ -47,7 +47,7 @@
 #define IPMIPCI_SKIP_BRIDGE_DISABLE "ipmipci-skip-bridge-disable"
 #define IPMIBT "ipmibt"
 #define IPMINET "ipminet"
-#define VERSION "v0.3.2"
+#define VERSION "v0.3.3"
 
 namespace
 {
@@ -199,7 +199,6 @@ int main(int argc, char* argv[])
 
     if (command.empty())
     {
-        std::fprintf(stderr, "Info:command not specified, use default command: update\n");
         command = "update";
     }
 
@@ -208,7 +207,6 @@ int main(int argc, char* argv[])
     {
         if (interface.empty())
         {
-            fprintf(stderr, "Info:interface is empty, use the default value IPMILPC.\n");
             interface = IPMILPC;
         }
         if (signaturePath != "")
@@ -256,7 +254,6 @@ int main(int argc, char* argv[])
             {
                 hostAddress = 0x94d00000; /* the same as set in config.h  by panzehua, 2021-12-21 */
                 hostLength = 0x10000; /* use 64kb length  by panzehua, 2021-12-21 */
-                std::fprintf(stderr, "Address or Length were 0, use default value.\n");
             }
             handler = std::make_unique<host_tool::LpcDataHandler>(
                 &blob, &devmem, hostAddress, hostLength, &progress);
